@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PKT DJ ADMIN</title>
+</head>
+<body>
+    {% if logged_in %}
+
+        <p id="status">
+          Successfully logged in.
+        </p>
+
+        <button id="reset">Reset</button>
+        <button id="start">Start process</button>
+        <button id="stop">Stop process</button>
+        <form method="post" action="setindex/">
+          {% csrf_token %}
+          <label>Current Default Playlist Song Index: {{index}}</label>
+          <input type="text" name="index" placeholder="Set index">
+          <button type="submit">Set</button>
+        </form>
+        <div>Next Song off Default playlist: {{next}}</div>
+        <div>
+          <a href="{% url 'dj:logout' %}">logout </a>
+        </div>
+    {% else %}
+
+        {% if invalid %}
+        <p>Invalid login</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'dj:login' %}">
+            {% csrf_token %}
+            <div class="form-group row">
+              <label for="Username-input" class="col-xs-2 col-form-label">Username:</label>
+              <div class="col-xs-10">
+                <input class="form-control" type="text" name="username" id="Username-input">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="pw-input" class="col-xs-2 col-form-label">Password:</label>
+              <div class="col-xs-10">
+                <input class="form-control" type="password" name="pw" id="pw-input">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    {% endif %}
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+  function status(msg) {
+    $('#status').html(msg);
+  }
+
+  $('#reset').click(function() {
+    $.get('reset/', function(data) {
+     status(data['msg']);
+    })
+  })
+
+  $('#start').click(function() {
+    $.get('start/', function(data) {
+     status(data['msg']);
+    })
+  })
+
+  $('#stop').click(function() {
+    $.get('stop/', function(data) {
+     status(data['msg']);
+    })
+  })
+
+
+</script>
+
+</html>
