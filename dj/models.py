@@ -16,6 +16,21 @@ class Feedback(models.Model):
         return self.name
 
 
+
+class VotedSong(models.Model):
+    song_id = models.CharField(max_length=64)
+    song_name = models.CharField(max_length=64)
+    artist = models.CharField(max_length=64)
+    artwork = models.CharField(max_length=256, blank=True)
+    play_time = models.DateTimeField(auto_now_add=True, null=True)
+
+    def view_votes(self):
+        return self.voted_song_set.count()
+
+    def __str__(self):
+        return self.song_name + ' - ' + self.artist
+
+
 class Song(models.Model):
     song_id = models.CharField(max_length=64)
     song_name = models.CharField(max_length=64)
@@ -23,20 +38,21 @@ class Song(models.Model):
     queued = models.BooleanField(default=False)
     artwork = models.CharField(max_length=256, blank=True)
     duration_ms = models.IntegerField(default=0)
-    dj_pick = models.BooleanField(default=False)
 
     def __str__(self):
         return self.song_name + ' - ' + self.artist
 
 
-
 class Voter(models.Model):
     ip = models.CharField(max_length=128)
     vote = models.ForeignKey(Song, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=64, blank=True, null=True)
 
+
+    past_votes = models.ManyToManyField(VotedSong)
 
     def __str__(self):
-        return self.ip
+        return self.ip if self.name is None else self.name
 
 
 

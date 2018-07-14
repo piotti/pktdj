@@ -2,7 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task, task
 
-from .models import SpotifyInfo, Song, Voter
+from .models import SpotifyInfo, Song, Voter, VotedSong
 
 from django.db.models import Count
 
@@ -61,34 +61,20 @@ def set_next_song(si):
         song = random.choice(list(top_songs))
         # queue song
         song.queued = True
-        # Remove song votes
-        Voter.objects.filter(vote=song).delete()
         song.save()
+
+
+    # Add track to track history in database
+    vs = VotedSong(song_id=song.song_id, song_name=song.song_name, artist=song.artist, artwork=song.artwork)
+    vs.save()
+    # transfer over voters
+    for voter in Voter.objects.filter(vote=song):
+        voter.past_votes.add(vs)
+        voter.vote = None
+        voter.save()
 
     # Actually queue song on spotify
     spot.add_track(si, song.song_id)
-
-    '''
-    # Add next song from default playlist
-    while True:
-        # Make sure song isn't in database, meaning it's currently playing
-        s_info = spot.get_playlist_tracks(si, pid=spot.default_playlist_id)['items'][si.playlist_index]['track']
-        si.playlist_index +=  1
-        if not Song.objects.filter(song_id=s_info['id']):
-            break
-    song = Song(song_id=s_info['id'],
-            song_name=s_info['name'],
-            artist=', '.join(a['name'] for a in s_info['artists']),
-            artwork=s_info['album']['images'][0]['url'],
-            duration_ms=s_info['duration_ms'],
-            dj_pick=True)
-    si.save()
-    song.save()
-
-    # Add Dj voter to vote for the song
-    Voter(ip='PKT DJ', vote=song).save()
-    '''
-    
 
 
 

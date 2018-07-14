@@ -3,3 +3,4 @@ mysite/settings.py
 **/__pycache__
 **/migrations
 *.sqlite3
+*.bat

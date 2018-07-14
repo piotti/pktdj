@@ -205,7 +205,6 @@ def logout(request):
 
 def reset_db(stop=False):
     Song.objects.all().delete()
-    Voter.objects.all().delete()
     si = SpotifyInfo.objects.all()[0]
     si.last_locked_in_id = None
     si.last_play_time = 0
