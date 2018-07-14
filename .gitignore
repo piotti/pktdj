@@ -1,3 +1,5 @@
 mysite/settings.py
 **.pyc
 **/__pycache__
+**/migrations
+*.sqlite3
