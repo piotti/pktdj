@@ -147,39 +147,16 @@ def vote(request, song_id):
 
     return JsonResponse({'result': 'success'}, safe=False)
 
-'''
-def next(request):
-
-    songs = Song.objects.annotate(votes=Count('voter')).order_by('-votes').exlude(dj_pick=True)
-    max_votes = songs[0].votes
-    if max_votes == 0:
-        # No one voted for a song, play the DJ pick instead
-        song = Song.objects.get(dj_pick=True)
-        song.dj_pick = False
-    else:
-        top_songs = songs.filter(votes=max_votes)
-        # Choose randomly for case when there are more than one
-        song = random.choice(list(top_songs))
-    # queue song
-    song.queued = True
-    Voter.objects.filter(vote=song).delete()
-    song.save()
-    # Delete all other songs
-    # Song.objects.all().exclude(id=song.id).delete()
-    # Remove all users
-    # Voter.objects.all().delete()
-    return JsonResponse({'song': song.song_id}, safe=False)
-'''
-
-
 def feedback(request):
     return render(request, 'dj/feedback.html', {'submitted': request.GET.get('submitted', False)})
 
 @csrf_protect
 def feedback_submit(request):
-
+    
     name = request.POST.get('name', '')
-    feedback = request.POST.get('feedback', '')
+    feedback = request.POST.get('feedback', str(request.POST))
+    if name == '' and feedback == '':
+        return redirect(reverse('dj:feedback'))
 
     fb = Feedback(name=name, feedback=feedback)
     fb.save()
@@ -192,7 +169,7 @@ def admin(request):
     # Get what could be the next song
     si = SpotifyInfo.objects.all()[0]
     ind = si.playlist_index
-    items = spot.get_playlist_tracks(si, pid=spot.default_playlist_id)['items']
+    items = spot.get_playlist_tracks(si, pid=si.default_playlist)['items']
     if si.playlist_index >= len(items):
         # End of playlist has been reached, loop to the beginning again
         ind = 0
