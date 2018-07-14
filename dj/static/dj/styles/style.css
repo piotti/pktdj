@@ -1,0 +1,114 @@
+
+body {
+    background: black;
+    color: white;
+    text-align: center;
+}
+
+#current_song {
+    font-size: 24px;
+}
+#next_song {
+    font-size: 24px;
+}
+
+#current-artist {
+    color: green;
+}
+#next-artist {
+    color: green;
+}
+
+#current_info {
+    width: 300px;
+}
+
+.panel {
+    background: black;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 0px 0px 5px 5px;
+}
+
+div {
+    margin: 0 auto;
+}
+
+#timer {
+    color: #3c3;
+}
+
+#search-bar {
+    background: black;
+    position: relative;
+    width: 200px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+#search-bar input {
+    text-indent: 30px;
+    color: black;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    border-color: white;
+    font-size: 15px;          
+
+}
+#search-bar img { 
+  position: absolute;
+  top: 8px;
+  left: 23px;
+  opacity: 0.5;
+  filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.carousel-item img {
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.slide_btn {
+    background-color: Transparent;
+    outline:none;
+    color: white;
+    border-radius: 5px;
+    cursor:pointer;
+    font-size: 20px;
+    border-color: white;
+    border-style: solid;
+
+}
+
+.slide-place {
+    color: #e7d7f7;
+}
+
+.search-obj {
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-color: #aaa;
+    width:300px;
+    text-align: left;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+}
+
+.search-obj .name {
+    font-size: 14px;
+}
+
+.search-obj .artist {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.search-obj button {
+    float: right;
+    font-size: 14px;
+}
+
+a {
+    color: #3a3;"
+}
